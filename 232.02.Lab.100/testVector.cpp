@@ -13,8 +13,8 @@
  //#undef DEBUG  // Remove this comment to disable unit tests
 
 #include "testVector.h"     // for the vector unit tests
-#include "vector.h"
-
+#include "testSpy.h"        // for the spy unit tests
+int Spy::counters[] = {};
 
 
 /**********************************************************************
@@ -25,6 +25,7 @@ int main()
 {
 #ifdef DEBUG
    // unit tests
+   TestSpy().run();
    TestVector().run();
 #endif // DEBUG
    

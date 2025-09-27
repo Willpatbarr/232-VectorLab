@@ -27,6 +27,8 @@
 		C12A3C16255ED05100C22728 /* vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vector.h; sourceTree = SOURCE_ROOT; };
 		C12A3C1A255ED07100C22728 /* testVector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testVector.cpp; sourceTree = SOURCE_ROOT; };
 		C12A3C1E255ED1CA00C22728 /* testVector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testVector.h; sourceTree = SOURCE_ROOT; };
+		C185CA4F259CCAC100C6D539 /* spy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = spy.h; sourceTree = "<group>"; };
+		C185CA63259CCAE800C6D539 /* testSpy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testSpy.h; sourceTree = "<group>"; };
 		C185CA7C259CCB5E00C6D539 /* unitTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = unitTest.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -45,6 +47,8 @@
 			isa = PBXGroup;
 			children = (
 				C185CA7C259CCB5E00C6D539 /* unitTest.h */,
+				C185CA4F259CCAC100C6D539 /* spy.h */,
+				C185CA63259CCAE800C6D539 /* testSpy.h */,
 				C12A3C1E255ED1CA00C22728 /* testVector.h */,
 				C12A3C1A255ED07100C22728 /* testVector.cpp */,
 				C12A3C16255ED05100C22728 /* vector.h */,
@@ -93,7 +97,7 @@
 					};
 				};
 			};
-			buildConfigurationList = C12A3C01255ECFEA00C22728 /* Build configuration list for PBXProject "LabVector" */;
+			buildConfigurationList = C12A3C01255ECFEA00C22728 /* Build configuration list for PBXProject "Lab01" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -255,7 +259,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C12A3C01255ECFEA00C22728 /* Build configuration list for PBXProject "LabVector" */ = {
+		C12A3C01255ECFEA00C22728 /* Build configuration list for PBXProject "Lab01" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C12A3C0B255ECFEA00C22728 /* Debug */,

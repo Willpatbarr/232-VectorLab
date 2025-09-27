@@ -15,6 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="spy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="testSpy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="testVector.h">
       <Filter>Header Files</Filter>
     </ClInclude>

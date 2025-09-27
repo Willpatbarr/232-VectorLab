@@ -4,12 +4,12 @@
  * Summary:
  *    Our custom implementation of std::vector
  *
- *        ____     _______        __
- *      .' __ '.  |  _____|   _  / /
- *      | (__) |  | |____    (_)/ /
- *      .`____'.  '_.____''.   / / _
- *     | (____) | | \____) |  / / (_)
- *     `.______.'  \______.' /_/
+ *      __       ____       ____         __
+ *     /  |    .'    '.   .'    '.   _  / /
+ *     `| |   |  .--.  | |  .--.  | (_)/ /
+ *      | |   | |    | | | |    | |   / / _
+ *     _| |_  |  `--'  | |  `--'  |  / / (_)
+ *    |_____|  '.____.'   '.____.'  /_/
  *
  *
  *    This will contain the class definition of:
@@ -37,6 +37,7 @@ namespace custom
  * VECTOR
  * Just like the std :: vector <T> class
  ****************************************/
+template <typename T>
 class vector
 {
    friend class ::TestVector; // give unit tests access to the privates
@@ -46,12 +47,13 @@ class vector
 public:
    
    // 
-   // Construct 
+   // Construct
    //
+
    vector();
-   vector(size_t numElements);
-   vector(size_t numElements, const int & t);
-   vector(const std::initializer_list<int>& l);
+   vector(size_t numElements                );
+   vector(size_t numElements, const T & t   );
+   vector(const std::initializer_list<T>& l );
    vector(const vector &  rhs);
    vector(      vector && rhs);
    ~vector();
@@ -64,37 +66,37 @@ public:
    {
 
    }
-   vector & operator = (const vector& rhs);
-   vector & operator = (vector && rhs);
-   
+   vector & operator = (const vector & rhs);
+   vector& operator = (vector&& rhs);
+
    //
    // Iterator
    //
 
    class iterator;
-   iterator begin();
-   iterator end();
+   iterator       begin() { return iterator(); }
+   iterator       end() { return iterator(); }
 
    //
    // Access
    //
 
-         int& operator [] (size_t index);
-   const int& operator [] (size_t index) const;
-         int& front();
-   const int& front() const;
-         int& back();
-   const int& back() const;
+         T& operator [] (size_t index);
+   const T& operator [] (size_t index) const;
+         T& front();
+   const T& front() const;
+         T& back();
+   const T& back() const;
 
-   // 
+   //
    // Insert
    //
 
-   void push_back(const int& t);
-   void push_back(int&& t);
-   void resize(size_t newElements);
-   void resize(size_t newElements, const int& t);
+   void push_back(const T& t);
+   void push_back(T&& t);
    void reserve(size_t newCapacity);
+   void resize(size_t newElements);
+   void resize(size_t newElements, const T& t);
 
    //
    // Remove
@@ -112,17 +114,20 @@ public:
    // Status
    //
 
-   size_t  size()     const { return 999;  }
-   size_t  capacity() const { return 999;  }
-   bool empty()       const { return true; }
+   size_t  size()          const { return 999;}
+   size_t  capacity()      const { return 999;}
+   bool empty()            const { return true;}
+   
+   // adjust the size of the buffer
+   
+   // vector-specific interfaces
    
 private:
    
-   int *   data;              // user data, a dynamically-allocated array
+   T *  data;                 // user data, a dynamically-allocated array
    size_t  numCapacity;       // the capacity of the array
    size_t  numElements;       // the number of items currently used
 };
-
 
 /**************************************************
  * VECTOR ITERATOR
@@ -135,7 +140,8 @@ private:
  * This particular iterator is a bi-directional meaning
  * that ++ and -- both work.  Not all iterators are that way.
  *************************************************/
-class vector::iterator
+template <typename T>
+class vector <T> ::iterator
 {
    friend class ::TestVector; // give unit tests access to the privates
    friend class ::TestStack;
@@ -143,12 +149,13 @@ class vector::iterator
    friend class ::TestHash;
 public:
    // constructors, destructors, and assignment operator
-   iterator()                           {  }
-   iterator(int* p)                     {  }
-   iterator(const iterator& rhs)        {  }
-   iterator(size_t index, vector& v)    {  }
+   iterator()                           { this->p = new T; }
+   iterator(T* p)                       { this->p = new T; }
+   iterator(const iterator& rhs)        { this->p = new T; }
+   iterator(size_t index, vector<T>& v) { this->p = new T; }
    iterator& operator = (const iterator& rhs)
    {
+      this->p = new T;
       return *this;
    }
 
@@ -157,9 +164,9 @@ public:
    bool operator == (const iterator& rhs) const { return true; }
 
    // dereference operator
-   int& operator * ()
+   T& operator * ()
    {
-      return *(new int);
+      return *(new T);
    }
 
    // prefix increment
@@ -187,20 +194,20 @@ public:
    }
 
 private:
-   int* p;
+   T* p;
 };
-
 
 /*****************************************
  * VECTOR :: DEFAULT constructors
- * efault constructor: set the number of elements,
+ * Default constructor: set the number of elements,
  * construct each element, and copy the values over
  ****************************************/
-vector :: vector()
+template <typename T>
+vector <T> :: vector()
 {
-   data = new int[99];
-   numElements = 17;
-   numCapacity = 19;
+   data = new T[10];
+   numCapacity = 99;
+   numElements = 99;
 }
 
 /*****************************************
@@ -208,22 +215,24 @@ vector :: vector()
  * non-default constructor: set the number of elements,
  * construct each element, and copy the values over
  ****************************************/
-vector :: vector(size_t num, const int & t) 
+template <typename T>
+vector <T> :: vector(size_t num, const T & t) 
 {
-   data = new int[99];
-   numElements = 17;
-   numCapacity = 19;
+   data = new T[10];
+   numCapacity = 99;
+   numElements = 99;
 }
 
 /*****************************************
  * VECTOR :: INITIALIZATION LIST constructors
  * Create a vector with an initialization list.
  ****************************************/
-vector :: vector(const std::initializer_list<int> & l) 
+template <typename T>
+vector <T> :: vector(const std::initializer_list<T> & l) 
 {
-   data = new int[99];
-   numElements = 17;
-   numCapacity = 19;
+   data = new T[10];
+   numCapacity = 99;
+   numElements = 99;
 }
 
 /*****************************************
@@ -231,11 +240,12 @@ vector :: vector(const std::initializer_list<int> & l)
  * non-default constructor: set the number of elements,
  * construct each element, and copy the values over
  ****************************************/
-vector :: vector(size_t num)
+template <typename T>
+vector <T> :: vector(size_t num) 
 {
-   data = new int[99];
-   numElements = 17;
-   numCapacity = 19;
+   data = new T[10];
+   numCapacity = 99;
+   numElements = 99;
 }
 
 /*****************************************
@@ -243,22 +253,24 @@ vector :: vector(size_t num)
  * Allocate the space for numElements and
  * call the copy constructor on each element
  ****************************************/
-vector :: vector (const vector & rhs)
+template <typename T>
+vector <T> :: vector (const vector & rhs) 
 {
-   data = new int[99];
-   numElements = 17;
-   numCapacity = 19;
+   data = new T[10];
+   numCapacity = 99;
+   numElements = 99;
 }
 
 /*****************************************
  * VECTOR :: MOVE CONSTRUCTOR
  * Steal the values from the RHS and set it to zero.
  ****************************************/
-vector :: vector (vector && rhs)
+template <typename T>
+vector <T> :: vector (vector && rhs)
 {
-   data = new int[99];
-   numElements = 17;
-   numCapacity = 19;
+   data = new T[10];
+   numCapacity = 99;
+   numElements = 99;
 }
 
 /*****************************************
@@ -266,7 +278,8 @@ vector :: vector (vector && rhs)
  * Call the destructor for each element from 0..numElements
  * and then free the memory
  ****************************************/
-vector :: ~vector()
+template <typename T>
+vector <T> :: ~vector()
 {
    
 }
@@ -278,14 +291,16 @@ vector :: ~vector()
  *     INPUT  : newCapacity the size of the new buffer
  *     OUTPUT :
  **************************************/
-void vector :: resize(size_t newElements)
+template <typename T>
+void vector <T> :: resize(size_t newElements)
 {
-   numElements = 21;
+   
 }
 
-void vector :: resize(size_t newElements, const int & t)
+template <typename T>
+void vector <T> :: resize(size_t newElements, const T & t)
 {
-   numElements = 21;
+   
 }
 
 /***************************************
@@ -296,9 +311,10 @@ void vector :: resize(size_t newElements, const int & t)
  *     INPUT  : newCapacity the size of the new buffer
  *     OUTPUT :
  **************************************/
-void vector :: reserve(size_t newCapacity)
+template <typename T>
+void vector <T> :: reserve(size_t newCapacity)
 {
-   numCapacity = 21;
+   numCapacity = 99;
 }
 
 /***************************************
@@ -307,7 +323,8 @@ void vector :: reserve(size_t newCapacity)
  *     INPUT  :
  *     OUTPUT :
  **************************************/
-void vector :: shrink_to_fit()
+template <typename T>
+void vector <T> :: shrink_to_fit()
 {
    
 }
@@ -318,54 +335,62 @@ void vector :: shrink_to_fit()
  * VECTOR :: SUBSCRIPT
  * Read-Write access
  ****************************************/
-int & vector :: operator [] (size_t index)
+template <typename T>
+T & vector <T> :: operator [] (size_t index)
 {
-   return *(new int);
+   return *(new T);
+   
 }
 
 /******************************************
  * VECTOR :: SUBSCRIPT
  * Read-Write access
  *****************************************/
-const int & vector :: operator [] (size_t index) const
+template <typename T>
+const T & vector <T> :: operator [] (size_t index) const
 {
-   return *(new int);
+   return *(new T);
 }
 
 /*****************************************
  * VECTOR :: FRONT
  * Read-Write access
  ****************************************/
-int & vector :: front ()
+template <typename T>
+T & vector <T> :: front ()
 {
-   return *(new int);
+   
+   return *(new T);
 }
 
 /******************************************
  * VECTOR :: FRONT
  * Read-Write access
  *****************************************/
-const int & vector :: front () const
+template <typename T>
+const T & vector <T> :: front () const
 {
-   return *(new int);
+   return *(new T);
 }
 
 /*****************************************
  * VECTOR :: FRONT
  * Read-Write access
  ****************************************/
-int & vector :: back()
+template <typename T>
+T & vector <T> :: back()
 {
-   return *(new int);
+   return *(new T);
 }
 
 /******************************************
  * VECTOR :: FRONT
  * Read-Write access
  *****************************************/
-const int & vector :: back() const
+template <typename T>
+const T & vector <T> :: back() const
 {
-   return *(new int);
+   return *(new T);
 }
 
 /***************************************
@@ -376,12 +401,14 @@ const int & vector :: back() const
  *     INPUT  : 't' the new element to be added
  *     OUTPUT : *this
  **************************************/
-void vector :: push_back (const int & t)
+template <typename T>
+void vector <T> :: push_back (const T & t)
 {
    
 }
 
-void vector :: push_back(int && t)
+template <typename T>
+void vector <T> ::push_back(T && t)
 {
    
    
@@ -394,12 +421,14 @@ void vector :: push_back(int && t)
  *     INPUT  : rhs the vector to copy from
  *     OUTPUT : *this
  **************************************/
-vector & vector :: operator = (const vector & rhs)
+template <typename T>
+vector <T> & vector <T> :: operator = (const vector & rhs)
 {
    
    return *this;
 }
-vector& vector :: operator = (vector&& rhs)
+template <typename T>
+vector <T>& vector <T> :: operator = (vector&& rhs)
 {
 
    return *this;
@@ -408,30 +437,5 @@ vector& vector :: operator = (vector&& rhs)
 
 
 
-/***************************************
- * VECTOR :: BEGIN
- * This will return an iterator referring to
- * the beginning element of the vector.
- *     INPUT  : None
- *     OUTPUT : iterator
- **************************************/
-vector::iterator vector :: begin()
-{
-   return iterator();
-}
-
-/***************************************
- * VECTOR :: END
- * This will return an iterator referring to the past
- * the end element of the vector.
- *     INPUT  : None
- *     OUTPUT : iterator
- **************************************/
-vector::iterator vector :: end()
-{
-   return iterator();
-}
-
-
-
 } // namespace custom
+
