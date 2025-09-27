@@ -16,12 +16,12 @@
  *        vector                 : A class that represents a Vector
  *        vector::iterator       : An interator through Vector
  * Author
- *    <your names here>
+ *    William Barr, Sara Nuss
  ************************************************************************/
 
 #pragma once
 
-#include <cassert>  // because I am paranoid
+#include <cassert>  // because I am paranoid - fair honestly
 #include <new>      // std::bad_alloc
 #include <memory>   // for std::allocator
 
@@ -205,9 +205,10 @@ private:
 template <typename T>
 vector <T> :: vector()
 {
-   data = new T[10];
-   numCapacity = 99;
-   numElements = 99;
+   // point it to nullptr, allocate memory when data is added to the vector
+   data        = nullptr;
+   numCapacity = 0;
+   numElements = 0;
 }
 
 /*****************************************
@@ -218,9 +219,25 @@ vector <T> :: vector()
 template <typename T>
 vector <T> :: vector(size_t num, const T & t) 
 {
-   data = new T[10];
-   numCapacity = 99;
-   numElements = 99;
+   // if the vector is created to be of size 0 then make a basic vector at nullptr
+   if (num == 0)
+   {
+      data        = nullptr;
+      numCapacity = num;
+      numElements = num;
+      return;
+   }
+   
+   // if the vector actually has a size make the vector and array according to that size
+   data        = new T[num];
+   numCapacity = num;
+   numElements = num;
+   
+   // initialize every element as a default of the data type T
+   for (size_t i = 0; i < num; i++)
+   {
+      data[i] = t;
+   }
 }
 
 /*****************************************
@@ -230,9 +247,28 @@ vector <T> :: vector(size_t num, const T & t)
 template <typename T>
 vector <T> :: vector(const std::initializer_list<T> & l) 
 {
-   data = new T[10];
-   numCapacity = 99;
-   numElements = 99;
+   const size_t n = l.size(); // size of the init list
+   
+   // if that size is zero:
+   if (n == 0)
+   {
+      data        = nullptr;
+      numCapacity = 0;
+      numElements = 0;
+      return;
+   }
+   
+   // for when it's actually not zero
+   data        = new T[n];
+   numCapacity = n;
+   numElements = n;
+   
+   // copy each element in the list
+   size_t i = 0;
+   for (const T& x : l)
+   {
+      data[i++] = x;
+   }
 }
 
 /*****************************************
@@ -243,9 +279,25 @@ vector <T> :: vector(const std::initializer_list<T> & l)
 template <typename T>
 vector <T> :: vector(size_t num) 
 {
-   data = new T[10];
-   numCapacity = 99;
-   numElements = 99;
+   // if the vector is created to be of size 0 then make a basic vector at nullptr
+   if (num == 0)
+   {
+      data        = nullptr;
+      numCapacity = num;
+      numElements = num;
+      return;
+   }
+   
+   // if the vector actually has a size make the vector and array according to that size
+   data        = new T[num];
+   numCapacity = num;
+   numElements = num;
+   
+   // initialize every element as a default of the data type T
+   for (size_t i = 0; i < num; i++)
+   {
+      data[i] = T();
+   }
 }
 
 /*****************************************
@@ -256,9 +308,22 @@ vector <T> :: vector(size_t num)
 template <typename T>
 vector <T> :: vector (const vector & rhs) 
 {
-   data = new T[10];
-   numCapacity = 99;
-   numElements = 99;
+   if (rhs.numElements == 0)
+   {
+      data        = nullptr;
+      numCapacity = 0;
+      numElements = 0;
+      return;
+   }
+   
+   numElements = rhs.numElements;
+   numCapacity = rhs.numElements;
+   data        = new T[numCapacity];
+   
+   for (size_t i = 0; i < numElements; i++)
+   {
+      data[i] = rhs.data[i];
+   }
 }
 
 /*****************************************
@@ -268,9 +333,15 @@ vector <T> :: vector (const vector & rhs)
 template <typename T>
 vector <T> :: vector (vector && rhs)
 {
-   data = new T[10];
-   numCapacity = 99;
-   numElements = 99;
+   data        = rhs.data;
+   numElements = rhs.numElements;
+   numCapacity = rhs.numCapacity;
+
+   
+   // empty out the vector moving in
+   rhs.data        = nullptr;
+   rhs.numElements = 0;
+   rhs.numCapacity = 0;
 }
 
 /*****************************************
@@ -281,7 +352,10 @@ vector <T> :: vector (vector && rhs)
 template <typename T>
 vector <T> :: ~vector()
 {
-   
+   delete[] data;
+   data        = nullptr;
+   numElements = 0;
+   numCapacity = 0;
 }
 
 /***************************************
